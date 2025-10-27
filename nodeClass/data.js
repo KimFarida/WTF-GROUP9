@@ -1,0 +1,30 @@
+exports.users = {
+        users : [
+            {
+                userid:1, 
+                username:"Farida",
+                gender: "female"
+            },
+
+            {
+                userid:2, 
+                username:"Dami",
+                gender: "female"
+            },
+            {
+                userid:3, 
+                username:"Paraclete",
+                gender: "female"
+            },
+            {
+                userid:4, 
+                username:"Augustine",
+                gender: "Male"
+            },
+            {
+                userid:5, 
+                username:"Kyrian",
+                gender: "Male"
+            },
+        ]
+    }

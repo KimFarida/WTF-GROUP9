@@ -1,0 +1,12 @@
+Node Core Modules
+3rd party Modules
+Custom Modules
+Integrate Certain Modules 
+
+NODE CORE MODULES
+fs - lets you read and write files
+Has classes and methods for i/o operations
+path - deals with file path
+E.g find a file in a directory
+http - For creating http server
+url  
