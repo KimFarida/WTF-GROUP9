@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Your Title",
+    "description": "Your Description",
+    "id": "7e18d58b-a75b-4a95-ac1b-76841276e860",
+    "status": "pending",
+    "createdAt": "2025-10-27T14:34:56+01:00",
+    "user": {
+      "id": 1,
+      "name": "Farida Momoh",
+      "email": "john.doe@example.com",
+      "role": "admin",
+      "active": true
+    }
+  },
+  {
+    "title": "Your Title",
+    "description": "Your Description",
+    "id": "23824a1f-afdf-4ce1-be17-360940bca216",
+    "status": "pending",
+    "createdAt": "2025-10-27T14:35:05+01:00",
+    "user": {
+      "name": "Paraclete",
+      "email": "julietkelechi@example.com",
+      "role": "developer",
+      "active": true,
+      "id": 12
+    }
+  }
+]
