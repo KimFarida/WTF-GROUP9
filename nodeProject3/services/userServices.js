@@ -1,4 +1,4 @@
-const { readDataAsync } = require("../utils/fileHelperAsync");
+const { readDataAsync, writeDataAsync } = require("../utils/fileHelperAsync");
 const path = require("path");
 const usersPath = path.join(__dirname, "../users.txt")
 const tasksPath = path.join(__dirname, "../tasks.txt")
@@ -14,4 +14,12 @@ const getUserById = async (id) => {
     return users.find((user) => user.id == Number(id));
 };
 
-module.exports = {getUsers, getUserById}
+const writeUser = async(users) => {
+    await writeDataAsync(users, usersPath)
+}
+
+const writeTask = async(tasks) => {
+    await writeDataAsync(tasks, tasksPath)
+}
+
+module.exports = {getUsers, getUserById, writeUser, writeTask}
