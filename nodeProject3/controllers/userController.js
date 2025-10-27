@@ -1,18 +1,11 @@
-const userService = require("../services/userServices");
-const { writeDataAsync, readDataAsync } = require("../utils/fileHelperAsync");
 const { getPostBodyAsync } = require("../utils/getPostBodyAsync")
 const response = require("../utils/response");
+const userService = require("../services/userServices");
 const _url = require('url')
-const uuidv4 = require('uuid')
+const uuid = require('uuid')
 const moment = require('moment')
-const path = require("path");
-
-const usersPath = path.join(__dirname, "../users.txt")
-const tasksPath = path.join(__dirname, "../tasks.txt")
 
 
-
-// userPath
 const createUser = async(req, res) => {
     try {
         const body = await getPostBodyAsync(req)
@@ -38,12 +31,10 @@ const createUser = async(req, res) => {
             });
         }
 
-        // will improve later with UUID
-        // {}
-        body.id = users.length + 1;
+        body.id = uuid.v4();
         users.push(body);
 
-        await writeDataAsync(usersPath, users);
+        await userService.writeUser(users);
 
         return response(res, {message: 'User created Successfully',data: users, status:201})
         
@@ -125,7 +116,7 @@ const updateUser = async (req, res) => {
         if (!userExists){
             return response(res, {
                 data: { message: `This user does not exist`},
-                status : 409,
+                status : 404,
             });
         }
 
@@ -137,9 +128,9 @@ const updateUser = async (req, res) => {
             })
         }
 
-        await writeDataAsync(usersPath, users);
+        await userService.writeUser(users);
         return response(res, {staus:200, data: {message: `User with ID ${userExists.id} updated successfully`}})
-    }
+        }
     else {
         return response(res,  {status:400, data: {message: "id is required"}})
     }
@@ -149,7 +140,6 @@ const updateUser = async (req, res) => {
 }
 
 // http://localhost:5000/users/3 
-
 const deleteUser = async (req, res) => {
     if (req.params){
         const id = req.params.id;
@@ -160,29 +150,25 @@ const deleteUser = async (req, res) => {
         if (!userExists){
             return response(res, {
                 data: { message: `This user does not exist`},
-                status : 409,
+                status : 404,
             });
         }
         
 
         const indexToDelete = users.findIndex(user => userExists);
-        console.log(indexToDelete)
-
-        // await writeDataAsync(users);
-        // return response(res, {staus:200, data: {message: `User with ID ${userExists.id} updated successfully`}})
-        // if (indexToDelete !== -1) {
-        //users.splice(indexToDelete, 1); // Remove 1 element at the found index
+        if (indexToDelete !== -1) {
+            users.splice(indexToDelete, 1)
+            await userService.writeUser(users)
+            return response(res, {staus:204})
+        }
+        
+        return response(res, {staus:404, data: {message: `User with ID ${userExists.id} does not exist`}})
 
     }
     else {
         return response(res,  {status:400, data: {message: "id is required"}})
     }
 
-    // I need to check if there is and id
-    // I need to check if the id exist, 
-    //. I need to update all queries avaliable 
-    // I need to push back
-    // I need to show the changes
 }
 
 // http:localhost:5000/id -> assign a task to the person
@@ -205,7 +191,7 @@ const createTask = async(req, res) => {
         if (!userExists){
             return response(res, {
                 data: { message: `This user does not exist`},
-                status : 409,
+                status : 404,
             });
         }
     
@@ -222,16 +208,15 @@ const createTask = async(req, res) => {
             }
 
         
-            body.id = uuidv4.v4()
+            body.id = uuid.v4()
             body.status = "pending"
             body.createdAt = moment().format()
             body.user = userExists
 
             // get all my tasks 
-            let tasks = await readDataAsync(tasksPath)
+            let tasks = await userService.getTasks();
             tasks.push(body);
-
-            await writeDataAsync(tasksPath, tasks);
+            await userService.writeTask(tasks);
 
             return response(res, {message: 'Task created Successfully',data: body, status:201})
             
