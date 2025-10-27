@@ -19,7 +19,11 @@ const writeUser = async(users) => {
 }
 
 const writeTask = async(tasks) => {
-    await writeDataAsync(tasks, tasksPath)
+    await writeDataAsync(tasksPath, tasks)
 }
 
-module.exports = {getUsers, getUserById, writeUser, writeTask}
+const getTasks = async() => {
+    return await readDataAsync(tasksPath);
+}
+
+module.exports = {getUsers, getUserById, writeUser, writeTask, getTasks}
