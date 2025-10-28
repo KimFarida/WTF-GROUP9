@@ -1,29 +1,47 @@
 const {readFile} = require("../utils/fileHelper")
-
+const path = require('path');
 
 const HIGHESTSCORE = 100
 
+const currFilePath = __filename
+const filePath = path.join(currFilePath, '../../records.txt')
+
+// If unsure how this works, just console log this point
+//console.log(filePath)
+
+const getStudents = async () =>{
+    const students = await readFile(filePath)
+    return students
+}
+
+
+const getStudentById = async (id)=>{
+    const students = await getStudents()
+    return students.find(s=> s.id == id)
+}
+
+
 // Calculate total score per course -> course -> list
-const totalScore = (course)=>{
+const totalScore = (testScores)=>{
     let total = 0
     // Loops thru the grade array of test scores and add the value
     //  to our total
-    for(let i=0; i<course.length; i++){
-        total += parseFloat(course[i])
+    for(let i=0; i<testScores.length; i++){
+        total += parseFloat(testScores[i])
     }
     return total
 };
 
 // Convert to Percentage Score -> Total Average
-const totalAverage = (course)=> {
+const totalAverage = (testScores)=> {
 
     // to get All Courses A student Offers
-    const numOfCourses = course.length
+    const numOfTests = testScores.length
 
-    // To get Cummulative Best Score
-    const highestTotal = numOfCourses * HIGHESTSCORE
+    // To get Cummulative Best Score From Doing Test 
+    const highestTotal = numOfTests * HIGHESTSCORE
 
-    const score = totalScore(course)
+    const score = totalScore(testScores)
 
     const totalAverage = Math.round((score/highestTotal) * 100)
 
@@ -61,7 +79,7 @@ const assignGrade = (totalAverage)=>{
 
 }
 
-module.exports = {totalScore, totalAverage, assignGrade}
+module.exports = {totalScore, totalAverage, assignGrade, getStudentById}
 
 
 
